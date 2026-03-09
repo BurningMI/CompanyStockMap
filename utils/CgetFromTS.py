@@ -71,7 +71,7 @@ class CgetFromTS:
         df = pd.read_csv(self.conf.RawCompListPath, usecols=["ts_code"])
         self.ts_codes = df["ts_code"].tolist()
 
-        for ts_code in self.ts_codes[:2]:
+        for ts_code in self.ts_codes[:10]:
             df = self.pro.top10_floatholders(
                 ts_code=ts_code,
                 start_date=self.conf.LastQuartBeg,
@@ -96,10 +96,10 @@ class CgetFromTS:
 
             # 如果执行到这里说明 df 已经有数据
             df.to_csv(
-                self.conf.CompShareholderPath,
+                self.conf.RawCompShareholderPath,
                 index=False,
                 mode="a",
-                header=not os.path.exists(self.conf.CompShareholderPath),
+                header=not os.path.exists(self.conf.RawCompShareholderPath),
                 encoding="utf-8-sig",
             )
 
@@ -113,9 +113,11 @@ class CgetFromTS:
 
         self.conf.RawCompListPath
         df = pd.read_csv(self.conf.RawCompListPath, usecols=["ts_code"])
-        self.ts_codes = df["ts_code"].tolist()
-        if os.path.exists(self.conf.CompMangagersPath):
-            os.remove(self.conf.CompMangagersPath)
+        #为了测试，只获取前5只股票的高管信息
+        #todo 后续删除测试代码
+        self.ts_codes = df["ts_code"].tolist()[:5]
+        if os.path.exists(self.conf.RawCompMangagersPath):
+            os.remove(self.conf.RawCompMangagersPath)
 
         first_write = True
 
@@ -128,7 +130,7 @@ class CgetFromTS:
                     continue
 
                 df.to_csv(
-                    self.conf.CompMangagersPath,
+                    self.conf.RawCompMangagersPath,
                     index=False,
                     mode="a",
                     header=first_write,
@@ -143,15 +145,52 @@ class CgetFromTS:
             except Exception as e:
                 logging.error(f"{ts_code} 获取高管信息失败: {e}")
                 print(f"{ts_code} 获取高管信息失败: {e}")
+
+    def get_manager_trades(self):
+        # 获取高管增减持记录，接口：stk_holdertrade
+        df = pd.read_csv(self.conf.RawCompListPath, usecols=["ts_code"])
+        ts_codes = df["ts_code"].tolist()[:5]
+
+        if os.path.exists(self.conf.RawManagerTradesPath):
+            os.remove(self.conf.RawManagerTradesPath)
+
+        first_write = True
+
+        for ts_code in ts_codes:
+            try:
+                df = self.pro.stk_holdertrade(
+                    ts_code=ts_code,
+                    start_date=self.conf.LastQuartBeg,
+                    end_date=self.conf.LastQuartEnd,
+                )
+
+                if df.empty:
+                    continue
+
+                df.to_csv(
+                    self.conf.RawManagerTradesPath,
+                    index=False,
+                    mode="a",
+                    header=first_write,
+                    encoding="utf-8-sig",
+                )
+                first_write = False
+                logging.info(f"已获取 {ts_code} 的高管增减持信息并写入文件")
+                print(f"已获取 {ts_code} 的高管增减持信息并写入文件")
+
+            except Exception as e:
+                logging.error(f"{ts_code} 获取高管增减持失败: {e}")
+                print(f"{ts_code} 获取高管增减持失败: {e}")
     
 
-        pass
+     
 
 if __name__ == "__main__":
     gts = CgetFromTS()
     # print(gts.conf.TsToken)
 
-    # df=gts.get_stock_basic()
+    df=gts.get_stock_basic()
     # print(df[:5])
     # gts.get_company_shareholder()
-    gts.get_company_mangagers()
+    # gts.get_company_mangagers()
+    gts.get_manager_trades()

@@ -5,19 +5,67 @@ from datetime import datetime, timedelta
 
 class Conf(object):
     def __init__(self):
-        self.TsToken = " your token"  # tushare token
+        self.TsToken = " Your Token"  # tushare token
         self.RootPath = os.path.dirname(
             os.path.dirname(os.path.abspath(__file__))
         )  # 项目根目录
+
         self.RawCompListPath = os.path.join(
-            self.RootPath, "data", "raw_comp_list.csv"
+            self.RootPath, "data", "Raw", "raw_comp_list.csv"
         )  # 原始公司列表文件路径
-        self.CompShareholderPath = os.path.join(
-            self.RootPath, "data", "comp_shareholder.csv"
-        )  # 公司股东列表文件路径
-        self.CompMangagersPath = os.path.join(
-            self.RootPath, "data", "comp_mangagers.csv"
-        )  # 公司管理层列表文件路径
+
+        self.RawCompShareholderPath = os.path.join(
+            self.RootPath, "data", "Raw", "raw_comp_shareholder.csv"
+        )  # 原始公司股东列表文件路径
+
+        self.RawCompMangagersPath = os.path.join(
+            self.RootPath, "data", "Raw", "raw_comp_mangagers.csv"
+        )  # 原始公司管理层列表文件路径
+
+        self.ProcessedCompListPath = os.path.join(
+            self.RootPath, "data", "processed", "processed_comp_list.csv"
+        )  # 处理过公司列表文件路径
+
+        self.ProcessedCompShareholderPath = os.path.join(
+            self.RootPath, "data", "processed", "processed_comp_shareholder.csv"
+        )  # 处理过公司股东列表文件路径
+
+        self.ProcessedCompMangagersPath = os.path.join(
+            self.RootPath, "data", "processed", "processed_comp_mangagers.csv"
+        )  # 处理过公司管理层列表文件路径
+
+        self.RawManagerTradesPath = os.path.join(
+            self.RootPath, "data", "Raw", "raw_manager_trades.csv"
+        )  # 原始高管增减持文件路径
+
+        self.ProcessedManagerTradesPath = os.path.join(
+            self.RootPath, "data", "processed", "processed_manager_trades.csv"
+        )  # 处理过高管增减持文件路径
+
+        self.RawCityListPath = os.path.join(
+            self.RootPath, "data", "Raw", "base", "raw_city.txt"
+        )  # 原始城市列表文件路径
+
+        self.ProcessedCityListPath = os.path.join(
+            self.RootPath, "data", "Processed", "processed_city_list.txt"
+        )  # 处理过城市列表文件路径
+
+        self.RawIndustryListPath = os.path.join(
+            self.RootPath, "data", "Raw", "base", "raw_industry_words.txt"
+        )  # 原始行业列表文件路径
+
+        self.ProcessedIndustryListPath = os.path.join(
+            self.RootPath, "data", "Processed", "processed_industry_list.txt"
+        )  # 处理过行业列表文件路径
+
+        self.RawCompSuffixesPath = os.path.join(
+            self.RootPath, "data", "Raw", "base", "raw_company_suffixes.txt"
+        )  # 原始公司简称列表文件路径
+
+        self.ProcessedCompSuffixesPath = os.path.join(
+            self.RootPath, "data", "Processed", "processed_company_suffixes.txt"
+        )  # 处理过公司简称列表文件路径
+
         self.LogPath = os.path.join(self.RootPath, "logs")  # 日志文件目录
 
         today = datetime.now()
