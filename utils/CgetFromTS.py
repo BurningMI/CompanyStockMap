@@ -3,17 +3,17 @@ from config.Conf import Conf
 import os
 import logging
 import pandas as pd
-from pprint import pprint
+# from pprint import pprint
 
 
 class CgetFromTS:
 
-    def __init__(self):
+    def __init__(self, conf):
         """
         初始化 tinyshare 客户端
         """
         try:
-            self.conf = Conf()  # 创建配置对象
+            self.conf = conf  # 创建配置对象
             ts.set_token(self.conf.TsToken)  # 设置 tushare token
             self.pro = ts.pro_api()  # 创建 tinyshare 接口对象
             self.ts_codes = None  # 存储股票代码列表，供后续获取股东信息使用
@@ -186,7 +186,8 @@ class CgetFromTS:
      
 
 if __name__ == "__main__":
-    gts = CgetFromTS()
+    conf=Conf()
+    gts = CgetFromTS(conf)
     # print(gts.conf.TsToken)
 
     df=gts.get_stock_basic()
