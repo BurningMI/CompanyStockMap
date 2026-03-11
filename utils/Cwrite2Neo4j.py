@@ -134,7 +134,7 @@ class Cwrite2Neo4j:
 
 if __name__ == "__main__":
     conf = Conf()
-    writer = Cwrite2Neo4j(conf, "bolt://localhost:7687", "neo4j", "123456")
+    writer = Cwrite2Neo4j(conf, conf.neo4j_uri, conf.neo4j_user, conf.neo4j_password)
     writer.write_companies()
     writer.write_industries()
     writer.write_managers()

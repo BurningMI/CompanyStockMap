@@ -106,6 +106,11 @@ class Conf(object):
             filemode="a",
             format="%(asctime)s - %(levelname)s - %(message)s",
         )
+        
+        self.neo4j_uri = "bolt://localhost:7687"  # Neo4j URI
+        self.neo4j_user = "neo4j"  # Neo4j 用户名
+        self.neo4j_password = "123456"  # Neo4j 密码
+        
 
 
 if __name__ == "__main__":
